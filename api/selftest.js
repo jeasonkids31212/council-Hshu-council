@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const response = await ai.models.generateContent({
       model: 'gemini-3.8-flash',
       contents: 'Reply exactly with OK',
-      config: { maxOutputTokens: 10, temperature: 0 }
+      config: { maxOutputTokens: 100, temperature: 0, thinkingConfig: { thinkingLevel: 'LOW' } }
     });
     const text = response.text || '';
     return res.status(200).json({ok:text.trim()==='OK', text:text.trim()});
