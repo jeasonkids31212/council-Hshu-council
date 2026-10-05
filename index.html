@@ -42,6 +42,7 @@ input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px
 .legQa{display:grid;gap:12px;margin-top:12px}
 .legQaCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
 .legQaTitle{font-size:17px;font-weight:850;margin-bottom:8px}
+.legQaSection{display:inline-block;margin-bottom:8px;padding:4px 8px;border-radius:999px;background:#e8f5ee;font-size:12px;font-weight:850;color:#17663a}
 .legQaQuestion{margin:8px 0 10px;padding:10px 12px;background:#eef4ff;border-radius:12px;font-size:15px;line-height:1.65}
 .legQaQuestion b{display:inline;font-size:15px;color:var(--text);margin:0}
 .legQaLabel{font-size:12px;font-weight:800;color:var(--muted);margin-top:10px;margin-bottom:4px}
@@ -120,7 +121,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
 const history={
 "羅美文":["勞工教育補助與講師費","HR勞動法令小學堂","勞檢人力","中學勞權教育","勞工權益補助","遠東工安","勞工消費合作社","勞工博物館"],
 "歐陽霆":["外籍移工管理"],
-"朱健銘":["法律遵循訪視與勞動檢查","移工重大傷亡事故處理","職災勞工服務","移工權益保障","身障就業與職涯重建"],
+"朱健銘":["高齡及中高齡再就業","庇護工場設立、營運補助及創新作為","法律遵循訪視與勞動檢查","移工重大傷亡事故處理","職災勞工服務","移工權益保障","身障就業與職涯重建"],
 "林志潔":["銀髮就業","身障就業"],
 "林禹佑":["重大職災與通報"]
 };
@@ -140,6 +141,8 @@ const legislatorQA={
 {topic:"外籍移工管理",answer:"本府移工服務涵蓋入國通報、訪視查察、離境驗證及勞資爭議處理，兼顧權益保障與合法聘僱管理。",numbers:"入國通報4,168件；訪視查察3,090件；離境驗證903件；外國人勞資爭議244件；就業服務法裁罰61件、806萬元。",follow:"若追問違法聘僱：透過通報、訪視、驗證及違規查處形成完整管理流程。"}
 ],
 "朱健銘":[
+{section:"福利科",topic:"高齡及中高齡再就業",question:"我國人口高齡及少子化，為支持勞工退休後重返職場再就業，並鼓勵事業單位留用屆齡員工傳承經驗，對於高齡及中高齡的再就業，本府的因應作為在哪？",answer:"本府已設置銀髮人才服務據點，從職業諮詢、企業開發、擴大宣導到就業媒合四個面向推動中高齡及高齡者再就業；同時持續開發湖口工業區周邊企業職缺，協助企業運用中高齡及高齡人力。對有進用需求的事業單位，也可透過工作流程改善及就業所需輔具等補助，降低進用障礙，讓經驗得以延續並回到職場。",numbers:"求職求才服務573人次；法令及職涯諮詢447人次；銀髮人力開發272人次；成功媒合131人。另編列補助事業單位改善工作流程或工作所需輔具經費，適用對象含銀髮者。",follow:"若追問如何鼓勵企業留用屆齡員工：本府會持續透過企業開發與職缺盤點，協助企業看見高齡人才的經驗價值，並結合工作流程改善、職務調整及相關中央促進就業資源，降低企業續留及再僱用門檻。",asOf:"查核截至115年10月5日（服務成果數據截至115年9月29日）",source:"第20屆第8次定期會業務報告（115/9/29版）；115、116年度歲出計畫相關銀髮人才服務及工作流程／輔具補助項目。"},
+{section:"福利科",topic:"庇護工場設立、營運補助及創新作為",question:"庇護工場是為具有就業意願、但就業能力不足而無法在一般競爭性就業市場立足的身心障礙者，提供長期支持與工作機會的重要場域。本府對於庇護工廠的設立及營運，有何補助措施及創新作為？",answer:"本府依身心障礙者庇護工場相關規定辦理設立許可、營運輔導及補助。可補助項目包括設立開辦設施設備、設備汰換、房屋租金、專業及營運人員人事費、行政費，以及其他必要營運支出；並透過實地訪查、評鑑及產品或服務行銷輔導，協助庇護工場穩定營運。創新方向則是由單純提供庇護工作，逐步加強就業力提升、職場體驗及轉銜一般職場，讓有能力的庇護性就業者有更多向外發展的機會。",numbers:"依勞工處官網115年3月4日更新資料，本縣列有5家庇護工場。中央補助規範可涵蓋設施設備、房租、人事、行政及必要營運支出；114年修正的庇護性就業者就業力提升試辦計畫另納入職能提升、臨時人力、職場體驗及轉銜成功等補助。",follow:"若追問創新作為是什麼：重點不是只維持庇護，而是增加就業力提升與轉銜機會，結合職場體驗、工作培訓及一般職場媒合；若追問目前家數，公開官網為5家，但內部115年9月29日業務報告曾載4家，建議福利科於備詢前再確認最新實際營運家數。",asOf:"查核截至115年10月5日",source:"新竹縣勞工處「身心障礙者庇護性就業服務」115/3/4更新；勞動部「補助地方政府辦理身心障礙者庇護性就業服務計畫」114/9/23修正；「庇護性就業者就業力提升試辦計畫」114/8/27修正。"},
 {topic:"法律遵循訪視與勞動檢查",question:"最近有許多事業單位接到勞工處處發函要求配合法律遵循訪視，其性質為何？與勞動檢查又有何不同？",answer:"法律遵循訪視的性質屬行政指導與法令宣導，重點是協助事業單位，尤其是中小企業，了解勞動法令、檢視內部制度並提出改善建議。與勞動檢查不同，法遵訪視重在輔導改善，訪視結果原則上不直接作為裁罰依據；勞動檢查則是依法查核，若查有違法事實，會依規定辦理後續處分。",numbers:"法遵訪視與勞動檢查目的不同：前者重輔導改善，後者重違法查核。",follow:"若追問為什麼企業要配合：目的不是增加企業負擔，而是透過事前輔導，協助建立合規制度，降低日後違法與勞資爭議風險。",asOf:"資料截至115年10月5日",source:"朱健銘議員預擬質詢問答；依現行勞動法令及本府法遵訪視執行口徑整理。"},
 {topic:"移工重大傷亡事故處理",question:"近期發生移工因運動意外不幸腦出血身亡的事件，移工重大傷亡事故之仲介通報機制、雇主責任追蹤及當事者之權益。",answer:"移工發生重大傷亡或死亡案件時，本府會依中央規定啟動通報、聯繫、協助及後續追蹤機制。依就業服務法第61條，外國人在受聘僱期間死亡，應由雇主代為處理相關喪葬事務；本府並會協助聯繫家屬、督促雇主與仲介妥為處理後續事宜，並協助符合資格者了解勞保、職保、職災補償、慰問金或其他相關權益。",numbers:"就業服務法第61條：外國人在受聘僱期間死亡，應由雇主代為處理其有關喪葬事務。中央「加強外國人遭人身侵害案件業務聯繫與處理原則及流程圖」於114年7月15日修正發布。",follow:"若追問通報怎麼做：依中央最新流程，由相關單位儘速通報地方勞工主管機關，再啟動跨單位聯繫與協處；若追問仲介責任，則依其受任事項及就業服務法相關規定檢視是否善盡責任。",asOf:"資料截至115年10月5日",source:"朱健銘議員預擬質詢問答；勞動部勞動力發展署「加強外國人遭人身侵害案件業務聯繫與處理原則及流程圖」及就業服務法第61條。"},
 {topic:"職災勞工服務",answer:"本府除職災慰問外，也透過職能復健及重返職場支持，協助職災勞工恢復工作能力並穩定復工。",numbers:"職災慰問24件、35萬5,000元；職能復健津貼12案、16萬6,148元。",follow:"若追問後續追蹤：會依個案需求轉介職能復健、就業服務及相關權益資源。",asOf:"資料截至115年9月29日",source:"第20屆第8次定期會業務報告（115/9/29版）。"},
@@ -265,6 +268,8 @@ function selectLeg(name){
  (legislatorQA[name]||[]).forEach(x=>{
    const card=document.createElement("div"); card.className="legQaCard";
    const title=document.createElement("div"); title.className="legQaTitle"; title.textContent=x.topic;
+   const section=document.createElement("div"); section.className="legQaSection"; section.textContent=x.section||"";
+   if(!x.section) section.classList.add("hidden");
    const qBox=document.createElement("div"); qBox.className="legQaQuestion";
    qBox.innerHTML="<b>原始題目：</b>"+(x.question||"目前未取得原文，以下以既有整理題名呈現。");
    const aLab=document.createElement("div"); aLab.className="legQaLabel"; aLab.textContent="30秒速答";
@@ -275,7 +280,7 @@ function selectLeg(name){
    const follow=document.createElement("div"); follow.className="legQaFollow"; follow.textContent=x.follow;
    const asOf=document.createElement("div"); asOf.className="legQaAsOf";
    asOf.textContent=(x.asOf||"資料截至115年9月29日")+(x.source?"｜"+x.source:"");
-   card.append(title,qBox,aLab,a,nLab,n,fLab,follow,asOf);
+   card.append(section,title,qBox,aLab,a,nLab,n,fLab,follow,asOf);
    qa.appendChild(card);
  });
  box.classList.remove("hidden");
