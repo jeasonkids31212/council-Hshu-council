@@ -110,9 +110,43 @@ export default async function handler(req, res) {
       }
     }
 
+    if (!answer && process.env.AI_GATEWAY_API_KEY) {
+      try {
+        const gatewayResponse = await fetch('https://ai-gateway.vercel.sh/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + process.env.AI_GATEWAY_API_KEY
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-3.6-flash',
+            messages: [
+              { role: 'system', content: systemInstruction + '\n這是備援模型。請優先使用題目中提供的既有議會資料；若涉及最新資訊且無法查證，必須清楚標示需再查核，不得編造。' },
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.2,
+            max_tokens: 1400
+          })
+        });
+        const gatewayData = await gatewayResponse.json();
+        if (gatewayResponse.ok) {
+          answer = gatewayData?.choices?.[0]?.message?.content || '';
+          if (answer) {
+            usedWeb = false;
+            sources = [];
+            console.log('Fallback served by Vercel AI Gateway');
+          }
+        } else {
+          console.error('Vercel AI Gateway fallback failed:', gatewayData);
+        }
+      } catch (gatewayErr) {
+        console.error('Vercel AI Gateway fallback error:', gatewayErr);
+      }
+    }
+
     if (!answer) {
       if (lastError) console.error(lastError);
-      res.status(502).json({ error: 'Gemini 暫時忙碌，請再試一次' });
+      res.status(502).json({ error: '直接 Gemini 與 Vercel AI 備援目前皆無法使用，請稍後再試' });
       return;
     }
 
