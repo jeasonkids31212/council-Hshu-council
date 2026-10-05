@@ -1,4 +1,4 @@
-import { generateText } from 'ai';
+import { GoogleGenAI } from '@google/genai';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,6 +9,11 @@ export default async function handler(req, res) {
   const { question, legislator = '全部' } = req.body || {};
   if (!question || typeof question !== 'string') {
     res.status(400).json({ error: '請輸入問題' });
+    return;
+  }
+
+  if (!process.env.GEMINI_API_KEY) {
+    res.status(500).json({ error: 'Gemini API 金鑰尚未設定' });
     return;
   }
 
@@ -53,44 +58,39 @@ export default async function handler(req, res) {
     '- 林禹佑：重大職災與通報。'
   ].join('\n');
 
-  const prompt = [
+  const systemInstruction = [
     '使用繁體中文，語氣要像縣政府處長在議會備詢，穩健、直接、不繞圈。',
-    '',
     '固定輸出格式：',
-    '【30秒速答】',
-    '2到4句，可直接口頭念。',
-    '',
-    '【關鍵數字】',
-    '只列與問題直接相關的數字；沒有就寫「現有資料未載明」。',
-    '',
-    '【追問速答】',
-    '列2到3組最可能追問，每組都有「Q：」與「A：」，A必須能直接念。',
-    '',
-    '【資料依據】',
-    '說明出自哪一批資料與日期；不得虛構頁碼。',
-    '',
-    '若問題涉及資料未涵蓋的最新修法、即時事件或外部事實，不要假裝知道，明確寫「現有議會資料不足，建議由主管科補充或另行查核最新法規」。',
-    '',
-    facts,
-    '',
-    '目前選取議員：' + legislator,
-    '使用者問題：' + question
+    '【30秒速答】2到4句，可直接口頭念。',
+    '【關鍵數字】只列與問題直接相關的數字；沒有就寫「現有資料未載明」。',
+    '【追問速答】列2到3組最可能追問，每組都有Q與A，A必須能直接念。',
+    '【資料依據】說明出自哪一批資料與日期；不得虛構頁碼。',
+    '若問題涉及資料未涵蓋的最新修法、即時事件或外部事實，不要假裝知道，明確寫「現有議會資料不足，建議由主管科補充或另行查核最新法規」。'
   ].join('\n');
 
+  const prompt = facts + '\n\n目前選取議員：' + legislator + '\n使用者問題：' + question;
+
   try {
-    const { text } = await generateText({
-      model: 'openai/gpt-5.6-sol',
-      prompt,
-      maxOutputTokens: 900,
-      providerOptions: {
-        gateway: {
-          disallowPromptTraining: true
-        }
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.8-flash',
+      contents: prompt,
+      config: {
+        systemInstruction,
+        maxOutputTokens: 900,
+        temperature: 0.2
       }
     });
-    res.status(200).json({ answer: text });
+
+    const answer = response.text || '';
+    if (!answer) {
+      res.status(502).json({ error: 'Gemini 未回傳文字內容' });
+      return;
+    }
+
+    res.status(200).json({ answer });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'AI 服務暫時無法使用' });
+    res.status(500).json({ error: 'Gemini 服務暫時無法使用' });
   }
 }
