@@ -39,6 +39,13 @@ input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px
 .hidden{display:none}
 .legHistory{margin-top:10px;padding:12px 14px;background:#eef4ff;border-radius:14px}
 .legHistory b{display:block;font-size:13px;margin-bottom:4px}
+.aiCard{background:#eef4ff;border:1px solid #cbd8ff;border-radius:18px;padding:16px;margin-top:16px}
+.aiTitle{font-size:17px;font-weight:850;margin-bottom:4px}
+.aiHint{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.aiAsk{display:grid;grid-template-columns:1fr auto;gap:8px}
+.aiAnswer{margin-top:12px;background:#fff;border-radius:14px;padding:14px;white-space:pre-wrap;line-height:1.7;font-size:16px}
+.aiStatus{font-size:13px;color:var(--muted);margin-top:8px}
+@media(max-width:640px){.aiAsk{grid-template-columns:1fr}.aiAsk button{width:100%}}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
 @media(max-width:640px){
  .wrap{padding:14px}
@@ -92,6 +99,17 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
   <button class="topicBtn" data-q="移工">移工</button>
   <button class="topicBtn" data-q="工會">工會</button>
 </div>
+
+<section class="aiCard">
+  <div class="aiTitle">AI 即問</div>
+  <div class="aiHint">遇到題庫外問題，直接問。AI 會優先依目前整理的議會資料回答；資料不足會明確標示。</div>
+  <div class="aiAsk">
+    <input id="aiInput" placeholder="例如：議員問為什麼勞檢員只有7人，處長怎麼答？">
+    <button class="primary" id="aiBtn">問 AI</button>
+  </div>
+  <div id="aiStatus" class="aiStatus"></div>
+  <div id="aiAnswer" class="aiAnswer hidden"></div>
+</section>
 
 <section class="card" aria-live="polite">
   <div class="kicker">建議回答</div>
@@ -201,6 +219,39 @@ document.querySelectorAll("[data-leg]").forEach(b=>b.addEventListener("click",()
 document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>{qInput.value=b.dataset.q;run(b.dataset.q)}));
 document.getElementById("searchBtn").addEventListener("click",()=>run(qInput.value));
 qInput.addEventListener("keydown",e=>{if(e.key==="Enter")run(qInput.value)});
+
+const aiInput=document.getElementById("aiInput");
+const aiBtn=document.getElementById("aiBtn");
+const aiStatus=document.getElementById("aiStatus");
+const aiAnswer=document.getElementById("aiAnswer");
+
+async function askAI(){
+ const question=(aiInput.value||"").trim();
+ if(!question) return;
+ aiBtn.disabled=true;
+ aiBtn.textContent="回答中…";
+ aiStatus.textContent="正在整理建議答法";
+ aiAnswer.classList.add("hidden");
+ try{
+   const r=await fetch("/api/ask",{
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({question,legislator:selectedLeg})
+   });
+   const data=await r.json();
+   if(!r.ok) throw new Error(data.error||"AI 服務暫時無法使用");
+   aiAnswer.textContent=data.answer;
+   aiAnswer.classList.remove("hidden");
+   aiStatus.textContent="AI 即問結果｜請以最新核定資料為準";
+ }catch(e){
+   aiStatus.textContent="AI 暫時無法回答："+e.message;
+ }finally{
+   aiBtn.disabled=false;
+   aiBtn.textContent="問 AI";
+ }
+}
+aiBtn.addEventListener("click",askAI);
+aiInput.addEventListener("keydown",e=>{if(e.key==="Enter")askAI()});
 </script>
 </body>
 </html>
