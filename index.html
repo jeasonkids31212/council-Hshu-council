@@ -42,6 +42,8 @@ input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px
 .legQa{display:grid;gap:12px;margin-top:12px}
 .legQaCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
 .legQaTitle{font-size:17px;font-weight:850;margin-bottom:8px}
+.legQaQuestion{margin:8px 0 10px;padding:10px 12px;background:#eef4ff;border-radius:12px;font-size:15px;line-height:1.65}
+.legQaQuestion b{display:inline;font-size:15px;color:var(--text);margin:0}
 .legQaLabel{font-size:12px;font-weight:800;color:var(--muted);margin-top:10px;margin-bottom:4px}
 .legQaText{font-size:15px;line-height:1.65}
 .legQaNums{font-size:15px;font-weight:800;line-height:1.65}
@@ -138,8 +140,8 @@ const legislatorQA={
 {topic:"外籍移工管理",answer:"本府移工服務涵蓋入國通報、訪視查察、離境驗證及勞資爭議處理，兼顧權益保障與合法聘僱管理。",numbers:"入國通報4,168件；訪視查察3,090件；離境驗證903件；外國人勞資爭議244件；就業服務法裁罰61件、806萬元。",follow:"若追問違法聘僱：透過通報、訪視、驗證及違規查處形成完整管理流程。"}
 ],
 "朱健銘":[
-{topic:"法律遵循訪視與勞動檢查",answer:"法律遵循訪視的性質屬行政指導與法令宣導，重點是協助事業單位，尤其是中小企業，了解勞動法令、檢視內部制度並提出改善建議。與勞動檢查不同，法遵訪視重在輔導改善，訪視結果原則上不直接作為裁罰依據；勞動檢查則是依法查核，若查有違法事實，會依規定辦理後續處分。",numbers:"法遵訪視與勞動檢查目的不同：前者重輔導改善，後者重違法查核。",follow:"若追問為什麼企業要配合：目的不是增加企業負擔，而是透過事前輔導，協助建立合規制度，降低日後違法與勞資爭議風險。",asOf:"資料截至115年10月5日",source:"朱健銘議員預擬質詢問答；依現行勞動法令及本府法遵訪視執行口徑整理。"},
-{topic:"移工重大傷亡事故處理",answer:"移工發生重大傷亡或死亡案件時，本府會依中央規定啟動通報、聯繫、協助及後續追蹤機制。依就業服務法第61條，外國人在受聘僱期間死亡，應由雇主代為處理相關喪葬事務；本府並會協助聯繫家屬、督促雇主與仲介妥為處理後續事宜，並協助符合資格者了解勞保、職保、職災補償、慰問金或其他相關權益。",numbers:"就業服務法第61條：外國人在受聘僱期間死亡，應由雇主代為處理其有關喪葬事務。中央「加強外國人遭人身侵害案件業務聯繫與處理原則及流程圖」於114年7月15日修正發布。",follow:"若追問通報怎麼做：依中央最新流程，由相關單位儘速通報地方勞工主管機關，再啟動跨單位聯繫與協處；若追問仲介責任，則依其受任事項及就業服務法相關規定檢視是否善盡責任。",asOf:"資料截至115年10月5日",source:"朱健銘議員預擬質詢問答；勞動部勞動力發展署「加強外國人遭人身侵害案件業務聯繫與處理原則及流程圖」及就業服務法第61條。"},
+{topic:"法律遵循訪視與勞動檢查",question:"最近有許多事業單位接到勞工處處發函要求配合法律遵循訪視，其性質為何？與勞動檢查又有何不同？",answer:"法律遵循訪視的性質屬行政指導與法令宣導，重點是協助事業單位，尤其是中小企業，了解勞動法令、檢視內部制度並提出改善建議。與勞動檢查不同，法遵訪視重在輔導改善，訪視結果原則上不直接作為裁罰依據；勞動檢查則是依法查核，若查有違法事實，會依規定辦理後續處分。",numbers:"法遵訪視與勞動檢查目的不同：前者重輔導改善，後者重違法查核。",follow:"若追問為什麼企業要配合：目的不是增加企業負擔，而是透過事前輔導，協助建立合規制度，降低日後違法與勞資爭議風險。",asOf:"資料截至115年10月5日",source:"朱健銘議員預擬質詢問答；依現行勞動法令及本府法遵訪視執行口徑整理。"},
+{topic:"移工重大傷亡事故處理",question:"近期發生移工因運動意外不幸腦出血身亡的事件，移工重大傷亡事故之仲介通報機制、雇主責任追蹤及當事者之權益。",answer:"移工發生重大傷亡或死亡案件時，本府會依中央規定啟動通報、聯繫、協助及後續追蹤機制。依就業服務法第61條，外國人在受聘僱期間死亡，應由雇主代為處理相關喪葬事務；本府並會協助聯繫家屬、督促雇主與仲介妥為處理後續事宜，並協助符合資格者了解勞保、職保、職災補償、慰問金或其他相關權益。",numbers:"就業服務法第61條：外國人在受聘僱期間死亡，應由雇主代為處理其有關喪葬事務。中央「加強外國人遭人身侵害案件業務聯繫與處理原則及流程圖」於114年7月15日修正發布。",follow:"若追問通報怎麼做：依中央最新流程，由相關單位儘速通報地方勞工主管機關，再啟動跨單位聯繫與協處；若追問仲介責任，則依其受任事項及就業服務法相關規定檢視是否善盡責任。",asOf:"資料截至115年10月5日",source:"朱健銘議員預擬質詢問答；勞動部勞動力發展署「加強外國人遭人身侵害案件業務聯繫與處理原則及流程圖」及就業服務法第61條。"},
 {topic:"職災勞工服務",answer:"本府除職災慰問外，也透過職能復健及重返職場支持，協助職災勞工恢復工作能力並穩定復工。",numbers:"職災慰問24件、35萬5,000元；職能復健津貼12案、16萬6,148元。",follow:"若追問後續追蹤：會依個案需求轉介職能復健、就業服務及相關權益資源。",asOf:"資料截至115年9月29日",source:"第20屆第8次定期會業務報告（115/9/29版）。"},
 {topic:"移工權益保障",answer:"移工勞資爭議由本府受理協調，必要時結合翻譯與相關資源協助權益維護，同時持續辦理訪視查察及違規查處。",numbers:"外國人勞資爭議244件；訪視查察3,090件。",follow:"若追問語言問題：會依案件需要結合翻譯與相關協助資源。",asOf:"資料截至115年9月29日",source:"第20屆第8次定期會業務報告（115/9/29版）。"},
 {topic:"身障就業與職涯重建",answer:"本縣整體定額進用高於法定需求，並持續透過庇護性就業、支持性就業及職業訓練等措施協助身障者穩定進入職場。",numbers:"法定應進用2,434人，實際進用3,324人，整體進用率137%；4家庇護工場；身障職訓3班47人。",follow:"若追問137%是否代表都沒問題：不是，仍需逐一追蹤不足額義務單位。",asOf:"資料截至115年9月29日",source:"第20屆第8次定期會業務報告（115/9/29版）。"}
@@ -263,6 +265,8 @@ function selectLeg(name){
  (legislatorQA[name]||[]).forEach(x=>{
    const card=document.createElement("div"); card.className="legQaCard";
    const title=document.createElement("div"); title.className="legQaTitle"; title.textContent=x.topic;
+   const qBox=document.createElement("div"); qBox.className="legQaQuestion";
+   qBox.innerHTML="<b>原始題目：</b>"+(x.question||"目前未取得原文，以下以既有整理題名呈現。");
    const aLab=document.createElement("div"); aLab.className="legQaLabel"; aLab.textContent="30秒速答";
    const a=document.createElement("div"); a.className="legQaText"; a.textContent=x.answer;
    const nLab=document.createElement("div"); nLab.className="legQaLabel"; nLab.textContent="關鍵數字";
@@ -271,7 +275,7 @@ function selectLeg(name){
    const follow=document.createElement("div"); follow.className="legQaFollow"; follow.textContent=x.follow;
    const asOf=document.createElement("div"); asOf.className="legQaAsOf";
    asOf.textContent=(x.asOf||"資料截至115年9月29日")+(x.source?"｜"+x.source:"");
-   card.append(title,aLab,a,nLab,n,fLab,follow,asOf);
+   card.append(title,qBox,aLab,a,nLab,n,fLab,follow,asOf);
    qa.appendChild(card);
  });
  box.classList.remove("hidden");
