@@ -207,7 +207,7 @@ async function askAI(question){
  const answer=document.getElementById("answer");
  btn.disabled=true; btn.textContent="查詢中…";
  topic.textContent="正在查詢："+question;
- answer.textContent="先比對議會題庫；如資料不足或涉及最新資訊，AI 會自動搜尋公開網路資料。";
+ answer.textContent="正在比對議會題庫與最新公開資料，必要時會自動切換備援服務。";
  document.getElementById("numbersBox").classList.add("hidden");
  document.getElementById("followBox").classList.add("hidden");
  document.getElementById("sourceBox").classList.add("hidden");
@@ -221,8 +221,19 @@ async function askAI(question){
    if(!r.ok) throw new Error(data.error||"AI 服務暫時無法使用");
    renderAI(data,question);
  }catch(e){
-   topic.textContent="AI 暫時無法回答";
-   answer.textContent=e.message+"。可先改用上方常用題目查內建資料。";
+   topic.textContent="智慧查詢暫時離線";
+   answer.textContent="目前雲端 AI 服務暫時無法連線。若是既有議會題目，可先使用上方常用題目；若要查最新規定，可先開啟網路搜尋。";
+   const sb=document.getElementById("sourceBox");
+   const src=document.getElementById("source");
+   src.innerHTML="";
+   const a=document.createElement("a");
+   a.href="https://www.google.com/search?q="+encodeURIComponent(question);
+   a.target="_blank"; a.rel="noopener noreferrer";
+   a.textContent="開啟 Google 搜尋：「"+question+"」";
+   a.style.display="inline-block";
+   a.style.marginTop="4px";
+   src.appendChild(a);
+   sb.classList.remove("hidden");
  }finally{
    btn.disabled=false; btn.textContent="智慧速答";
  }
