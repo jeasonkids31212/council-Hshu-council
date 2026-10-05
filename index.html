@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新竹縣政府勞工處｜議會備詢速答助手</title>
+<style>
+:root{--bg:#f6f8fb;--panel:#ffffff;--text:#172033;--muted:#687386;--border:#dce2ea;--accent:#2463eb;--accent-soft:#eaf0ff;--warn:#fff7e8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--text)}
+.wrap{max-width:980px;margin:0 auto;padding:24px}
+header{margin-bottom:18px}
+h1{font-size:28px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:14px}
+.search{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
+label{font-size:14px;font-weight:700}
+input{width:100%;margin-top:8px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;font-size:16px;background:white}
+button{min-height:46px;border-radius:12px;border:1px solid var(--border);background:white;padding:0 16px;font-size:15px;cursor:pointer}
+button.primary{background:var(--accent);color:white;border-color:var(--accent);font-weight:700}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px}
+.kicker{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.08em}
+.topic{font-size:22px;font-weight:800;margin:6px 0 12px}
+.answer{font-size:18px;line-height:1.7}
+.block{margin-top:16px;padding:15px;border-radius:14px;background:#f8fafc}
+.block strong{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+.numbers{font-size:19px;font-weight:800;line-height:1.6}
+.follow{line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mini{background:white;border:1px solid var(--border);border-radius:14px;padding:15px}
+.mini b{display:block;margin-bottom:5px}
+.mini span{color:var(--muted);font-size:14px;line-height:1.55}
+.badge{display:inline-block;background:var(--accent-soft);color:var(--accent);padding:4px 9px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:8px}
+.note{background:var(--warn)}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:10px 0 22px}
+@media(max-width:680px){.wrap{padding:16px}.search{grid-template-columns:1fr}.grid{grid-template-columns:1fr}h1{font-size:23px}.topic{font-size:20px}.answer{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="badge">固定介面雛型</div>
+  <h1>議會備詢速答助手</h1>
+  <div class="sub">新竹縣政府勞工處｜輸入關鍵字，快速取得建議答法、關鍵數字與可能追問</div>
+</header>
+
+<section class="search">
+  <label>議員問什麼？直接打關鍵字
+    <input id="qInput" placeholder="例如：身障進用、銀髮就業、預算、勞檢人力、HR勞動法令小學堂">
+  </label>
+  <button class="primary" id="searchBtn">速答</button>
+</section>
+
+<div class="quick">
+  <button data-q="身障就業">身障就業</button>
+  <button data-q="銀髮就業">銀髮就業</button>
+  <button data-q="預算">預算</button>
+  <button data-q="工會">工會</button>
+  <button data-q="勞檢人力">勞檢人力</button>
+  <button data-q="HR勞動法令小學堂">HR勞動法令小學堂</button>
+  <button data-q="移工">移工</button>
+</div>
+
+<section class="card" aria-live="polite">
+  <div class="kicker">建議回答</div>
+  <div class="topic" id="topic">先輸入問題或點上方快速題目</div>
+  <div class="answer" id="answer">正式版以「先結論、再數字、最後補充」的方式回答，避免議場上翻找資料。</div>
+  <div class="block" id="numbersBox" style="display:none"><strong>關鍵數字</strong><div class="numbers" id="numbers"></div></div>
+  <div class="block" id="followBox" style="display:none"><strong>議員可能接著問</strong><div class="follow" id="follow"></div></div>
+  <div class="block note" id="sourceBox" style="display:none"><strong>資料來源／時間點</strong><div class="follow" id="source"></div></div>
+</section>
+
+<section class="grid">
+  <div class="mini"><b>① 先講結論</b><span>第一句就回答議員，不繞背景。</span></div>
+  <div class="mini"><b>② 數字放大</b><span>人數、件數、經費、比例獨立顯示。</span></div>
+  <div class="mini"><b>③ 預判追問</b><span>同步準備第二層答案，方便處長接話。</span></div>
+</section>
+
+<footer>此版本為議會備詢速答助手獨立網頁雛型。正式使用前請以最新核定資料更新題庫。</footer>
+</div>
+
+<script>
+const data=[
+{keys:["身障","進用"],topic:"身心障礙者就業與定額進用",answer:"本縣整體定額進用情形高於法定需求。備詢時建議先回答「整體進用充足」，再補充足額、超額及實際進用人數。",numbers:"平均應進用單位594家；足額322家、超額199家；法定應進用2,434人，實際進用3,324人，整體進用率137%。",follow:"若追問不足額單位如何處理，可接續說明依法追蹤、輔導及促進身障就業措施。",source:"第20屆第8次定期會業務報告（115/9/29版）"},
+{keys:["銀髮","高齡"],topic:"銀髮就業",answer:"本府持續推動中高齡及高齡者就業服務，透過銀髮人才服務據點提供職業諮詢、企業開發、宣導與就業媒合。",numbers:"求職求才服務573人次；法令及職涯諮詢447人次；銀髮人力開發272人次；成功媒合131人。",follow:"可能追問據點成效、周邊企業開發、服務量能及中央資源分工。",source:"第20屆第8次定期會業務報告（115/9/29版）"},
+{keys:["工會"],topic:"本縣工會概況",answer:"本縣工會組織維持穩定，備詢可先用「家數＋會員數」回答，再依議員問題區分總工會及基層工會。",numbers:"工會165家，其中縣級總工會3家、基層工會162家；會員約6.7萬人。",follow:"可能追問勞工教育補助、講師費、工會幹部授課、勞教課程內容。",source:"第20屆第8次定期會業務報告（115/9/29版）"},
+{keys:["移工","外國人"],topic:"移工服務與管理",answer:"移工服務從入國通報、訪視查察、離境驗證到勞資爭議處理均有完整流程，並透過行政查處兼顧權益保障與合法聘僱管理。",numbers:"入國通報4,168件；訪視查察3,090件；提前終止聘僱關係離境驗證903件；外國人勞資爭議244件；違反就業服務法裁罰61件、806萬元。",follow:"可能追問爭議類型、查察成效、仲介或雇主違法處理。",source:"第20屆第8次定期會業務報告（115/9/29版）"},
+{keys:["預算","中央補助","縣庫"],topic:"115／116年度預算變化",answer:"116年度總預算較115年度小幅增加，但結構上是縣庫負擔增加、中央補助減少。答詢時應把「總額」與「財源結構」分開說明。",numbers:"115年度：155,779,000元；116年度：156,953,000元。縣庫約由56,935,522元增至67,731,410元；中央補助約由98,843,478元降至89,221,590元。",follow:"可能追問：中央補助為何減少？哪些計畫受影響？縣庫增加支應哪些項目？",source:"115、116年度歲出計畫說明提要與各項費用明細表"},
+{keys:["勞檢","檢查員","擴編"],topic:"勞動檢查人力",answer:"現有勞動檢查員額7人，另以身心障礙者就業基金增置2名助理員協助行政庶務；未來中央如釋出調整員額，本府將積極爭取。",numbers:"115年3月資料：本縣公司及商業登記家數37,901家，約占全國2%；中央補助地方勞檢員額全國325名；本縣現有勞檢員7人。",follow:"可能追問：為何不能直接擴編至10人？每年檢查量多少？人力是否足夠？",source:"第20屆第7次定期會羅美文議員口頭質詢處理情形"},
+{keys:["HR","小學堂","LINE"],topic:"HR勞動法令小學堂 LINE 社群",answer:"該LINE社群為本處離職勞檢員自行建置，並非本府官方帳號，本府無權派員擔任私人社群管理員；目前以1999、縣民信箱及勞工處Facebook等正式管道提供諮詢。",numbers:"數位發展處曾評估整合AI客服；考量人力、經費及無法提供24小時即時回覆，目前尚難由勞工處單獨建置LINE官方帳號。",follow:"若追問縣長指示進度：可說明已完成權責釐清與可行性評估，後續配合數位發展處AI客服整合規劃。",source:"第20屆第7次定期會質詢事項執行進度，資料整理至115/9/29"}
+];
+function run(q){
+q=(q||"").trim();
+const topic=document.getElementById("topic"),answer=document.getElementById("answer"),nb=document.getElementById("numbersBox"),fb=document.getElementById("followBox"),sb=document.getElementById("sourceBox");
+if(!q){topic.textContent="請輸入問題";answer.textContent="例如：議員問身障進用率多少？";nb.style.display=fb.style.display=sb.style.display="none";return}
+let best=null,score=0;
+data.forEach(item=>{let s=item.keys.reduce((n,k)=>n+(q.includes(k)?1:0),0);if(s>score){score=s;best=item}});
+if(!best){topic.textContent="尚未收入題庫："+q;answer.textContent="現有資料未載明，建議由主管科補充；本系統不自行推測。";nb.style.display="none";fb.style.display=sb.style.display="block";document.getElementById("follow").textContent="建議補入：主管科、最新數字、正式口徑、資料日期與來源。";document.getElementById("source").textContent="尚無對應資料";return}
+topic.textContent=best.topic;answer.textContent=best.answer;document.getElementById("numbers").textContent=best.numbers;document.getElementById("follow").textContent=best.follow;document.getElementById("source").textContent=best.source;nb.style.display=fb.style.display=sb.style.display="block";
+}
+document.getElementById("searchBtn").addEventListener("click",()=>run(document.getElementById("qInput").value));
+document.getElementById("qInput").addEventListener("keydown",e=>{if(e.key==="Enter")run(e.target.value)});
+document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>{document.getElementById("qInput").value=b.dataset.q;run(b.dataset.q)}));
+</script>
+</body>
+</html>
