@@ -39,6 +39,13 @@ input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px
 .hidden{display:none}
 .legHistory{margin-top:10px;padding:12px 14px;background:#eef4ff;border-radius:14px}
 .legHistory b{display:block;font-size:13px;margin-bottom:4px}
+.legQa{display:grid;gap:12px;margin-top:12px}
+.legQaCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+.legQaTitle{font-size:17px;font-weight:850;margin-bottom:8px}
+.legQaLabel{font-size:12px;font-weight:800;color:var(--muted);margin-top:10px;margin-bottom:4px}
+.legQaText{font-size:15px;line-height:1.65}
+.legQaNums{font-size:15px;font-weight:800;line-height:1.65}
+.legQaFollow{margin-top:6px;padding:10px 12px;background:#f8fafc;border-radius:12px;font-size:14px;line-height:1.6}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
 @media(max-width:640px){
  .wrap{padding:14px}
@@ -75,6 +82,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
 <div id="legHistory" class="legHistory hidden">
   <b id="legTitle"></b>
   <div id="legTopics" class="historyText"></div>
+  <div id="legQa" class="legQa"></div>
 </div>
 
 <div class="search">
@@ -112,6 +120,34 @@ const history={
 "朱健銘":["職災勞工服務","移工權益保障","身障就業與職涯重建"],
 "林志潔":["銀髮就業","身障就業"],
 "林禹佑":["重大職災與通報"]
+};
+
+const legislatorQA={
+"羅美文":[
+{topic:"勞檢人力",answer:"目前本縣勞動檢查員7人，另以身心障礙者就業基金增置2名助理員協助行政庶務，讓勞檢員集中在檢查與專業工作；中央如釋出員額，本府將積極爭取。",numbers:"本縣公司及商業登記37,901家，約占全國2%；中央補助地方勞檢員額全國325名；本縣勞檢員7人。",follow:"若追問7人夠不夠：目前每年執行勞動檢查及法遵訪視至少1,300件，案件量持續增加，因此短期先以2名助理員分擔行政工作，正式員額持續向中央爭取。"},
+{topic:"HR勞動法令小學堂",answer:"該LINE社群是離職勞檢員自行建立的私人社群，並非本府官方帳號，本府無權派員接任管理員；目前仍以1999、縣民信箱及勞工處Facebook作為正式諮詢管道。",numbers:"已與數位發展處評估官方LINE及AI客服整合可能性。",follow:"若追問縣長交辦後做了什麼：已完成權責釐清與可行性評估，並與數位發展處研商官方LINE與AI客服整合。"},
+{topic:"勞工教育補助與講師費",answer:"本府已重新檢視勞工教育補助要點，將針對課程內容、補助項目及標準研議調整，讓經費更聚焦勞動法令、勞資關係及勞工權益。",numbers:"勞工教育69班、4,721人次；中國生產力中心114年度相關計畫經費162萬2,467元。",follow:"若追問工會幹部自己當講師：本府已參酌勞動部規定，研議限縮受補助工會幹部授課時數，鼓勵邀請專家學者授課。"},
+{topic:"中學勞權教育",answer:"本府將與教育處持續合作，把求職防騙、勞動權益等內容納入校園宣導，並視課程需求邀請工會代表、勞動法令專業人士或律師參與。",numbers:"求職防騙已辦理23場次、4,575人次。",follow:"若追問是否會常態化：會以跨局處合作方式持續推動，並依學校需求安排主題與講師。"},
+{topic:"勞工權益補助",answer:"相關補助標準會持續參考中央規定及其他縣市作法檢討，兼顧勞工實際需求、財政負擔與制度一致性。",numbers:"現有議會資料未載明最新調整金額。",follow:"若追問會不會提高：會持續檢討，但具體標準仍須依預算、法令及審議程序辦理。"},
+{topic:"遠東工安",answer:"對於重大或重複性職安風險，會持續配合職安署及北區職業安全衛生中心加強查核與追蹤改善，督促事業單位落實風險管控。",numbers:"遠東新世紀108至114年間遭職安署開罰21次、累計275萬元。",follow:"若追問縣府能做什麼：在權責範圍內持續配合檢查、法遵訪視及職安宣導，並針對高風險事業單位加強追蹤。"},
+{topic:"勞工消費合作社",answer:"目前湖口已有「有限責任新竹縣勞工消費合作社」，後續若有勞工團體提出需求，本府可依合作社法規定提供相關行政協助。",numbers:"目前已知1家。",follow:"若追問是否由縣府成立：合作社屬民間社員自主組織，縣府角色以依法輔導與行政協助為主。"},
+{topic:"勞工博物館",answer:"目前前斗崙就業服務站產權屬桃竹苗分署，規劃重建作為桃竹苗區銀髮人才資源中心；未來若有合適空間與資源，本府可再評估勞動文化保存與展示的可行性。",numbers:"前斗崙就業服務站現由中央分署規劃重建。",follow:"若追問是否有明確期程：目前尚無勞工博物館具體期程，仍須視空間、經費及整體政策規劃評估。"}
+],
+"歐陽霆":[
+{topic:"外籍移工管理",answer:"本府移工服務涵蓋入國通報、訪視查察、離境驗證及勞資爭議處理，兼顧權益保障與合法聘僱管理。",numbers:"入國通報4,168件；訪視查察3,090件；離境驗證903件；外國人勞資爭議244件；就業服務法裁罰61件、806萬元。",follow:"若追問違法聘僱：透過通報、訪視、驗證及違規查處形成完整管理流程。"}
+],
+"朱健銘":[
+{topic:"職災勞工服務",answer:"本府除職災慰問外，也透過職能復健及重返職場支持，協助職災勞工恢復工作能力並穩定復工。",numbers:"職災慰問24件、35萬5,000元；職能復健津貼12案、16萬6,148元。",follow:"若追問後續追蹤：會依個案需求轉介職能復健、就業服務及相關權益資源。"},
+{topic:"移工權益保障",answer:"移工勞資爭議由本府受理協調，必要時結合翻譯與相關資源協助權益維護，同時持續辦理訪視查察及違規查處。",numbers:"外國人勞資爭議244件；訪視查察3,090件。",follow:"若追問語言問題：會依案件需要結合翻譯與相關協助資源。"},
+{topic:"身障就業與職涯重建",answer:"本縣整體定額進用高於法定需求，並持續透過庇護性就業、支持性就業及職業訓練等措施協助身障者穩定進入職場。",numbers:"法定應進用2,434人，實際進用3,324人，整體進用率137%；4家庇護工場；身障職訓3班47人。",follow:"若追問137%是否代表都沒問題：不是，仍需逐一追蹤不足額義務單位。"}
+],
+"林志潔":[
+{topic:"銀髮就業",answer:"本府持續透過銀髮人才服務據點推動職業諮詢、企業開發、宣導及就業媒合，協助中高齡與高齡者重返職場。",numbers:"求職求才573人次；法令及職涯諮詢447人次；銀髮人力開發272人次；成功媒合131人。",follow:"若追問下一步：持續強化企業開發及媒合，並開發湖口工業區周邊職缺。"},
+{topic:"身障就業",answer:"本縣整體身障定額進用情形高於法定需求，並持續透過支持性就業、庇護性就業及職業訓練協助穩定就業。",numbers:"平均應進用單位594家；足額322家、超額199家；實際進用3,324人，進用率137%。",follow:"若追問不足額單位：會持續個別追蹤並結合就業服務、職務再設計等措施協助進用。"}
+],
+"林禹佑":[
+{topic:"重大職災與通報",answer:"對重大職災案件，本府會依法辦理通報、檢查及後續追蹤，並依權責配合中央職安單位督促事業單位改善，同時協助職災勞工權益與重返職場。",numbers:"職安指定醫療機構11家；職災慰問24件、35萬5,000元；職能復健津貼12案、16萬6,148元。",follow:"若追問如何降低再發：持續加強勞檢、法遵訪視、職安教育訓練及高風險事業單位追蹤。"}
+]
 };
 
 const data=[
@@ -154,9 +190,27 @@ function selectLeg(name){
  selectedLeg=name;
  document.querySelectorAll("[data-leg]").forEach(b=>b.classList.toggle("active",b.dataset.leg===name));
  const box=document.getElementById("legHistory");
- if(name==="全部"){box.classList.add("hidden");return;}
+ const qa=document.getElementById("legQa");
+ if(name==="全部"){
+   box.classList.add("hidden");
+   qa.innerHTML="";
+   return;
+ }
  document.getElementById("legTitle").textContent=name+"議員過去關切";
  document.getElementById("legTopics").textContent=(history[name]||[]).join("、");
+ qa.innerHTML="";
+ (legislatorQA[name]||[]).forEach(x=>{
+   const card=document.createElement("div"); card.className="legQaCard";
+   const title=document.createElement("div"); title.className="legQaTitle"; title.textContent=x.topic;
+   const aLab=document.createElement("div"); aLab.className="legQaLabel"; aLab.textContent="30秒速答";
+   const a=document.createElement("div"); a.className="legQaText"; a.textContent=x.answer;
+   const nLab=document.createElement("div"); nLab.className="legQaLabel"; nLab.textContent="關鍵數字";
+   const n=document.createElement("div"); n.className="legQaNums"; n.textContent=x.numbers;
+   const fLab=document.createElement("div"); fLab.className="legQaLabel"; fLab.textContent="可能追問";
+   const follow=document.createElement("div"); follow.className="legQaFollow"; follow.textContent=x.follow;
+   card.append(title,aLab,a,nLab,n,fLab,follow);
+   qa.appendChild(card);
+ });
  box.classList.remove("hidden");
 }
 
@@ -266,7 +320,7 @@ async function run(q){
  await askAI(q);
 }
 
-document.querySelectorAll("[data-leg]").forEach(b=>b.addEventListener("click",()=>{selectLeg(b.dataset.leg);run("")}));
+document.querySelectorAll("[data-leg]").forEach(b=>b.addEventListener("click",()=>{selectLeg(b.dataset.leg);}));
 document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>{qInput.value=b.dataset.q;run(b.dataset.q)}));
 document.getElementById("searchBtn").addEventListener("click",()=>run(qInput.value));
 qInput.addEventListener("keydown",e=>{if(e.key==="Enter")run(qInput.value)});
