@@ -77,8 +77,11 @@ export default async function handler(req, res) {
       contents: prompt,
       config: {
         systemInstruction,
-        maxOutputTokens: 900,
-        temperature: 0.2
+        maxOutputTokens: 1200,
+        temperature: 0.2,
+        thinkingConfig: {
+          thinkingLevel: 'LOW'
+        }
       }
     });
 
