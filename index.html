@@ -39,13 +39,6 @@ input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px
 .hidden{display:none}
 .legHistory{margin-top:10px;padding:12px 14px;background:#eef4ff;border-radius:14px}
 .legHistory b{display:block;font-size:13px;margin-bottom:4px}
-.aiCard{background:#eef4ff;border:1px solid #cbd8ff;border-radius:18px;padding:16px;margin-top:16px}
-.aiTitle{font-size:17px;font-weight:850;margin-bottom:4px}
-.aiHint{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px}
-.aiAsk{display:grid;grid-template-columns:1fr auto;gap:8px}
-.aiAnswer{margin-top:12px;background:#fff;border-radius:14px;padding:14px;white-space:pre-wrap;line-height:1.7;font-size:16px}
-.aiStatus{font-size:13px;color:var(--muted);margin-top:8px}
-@media(max-width:640px){.aiAsk{grid-template-columns:1fr}.aiAsk button{width:100%}}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
 @media(max-width:640px){
  .wrap{padding:14px}
@@ -85,8 +78,8 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
 </div>
 
 <div class="search">
-  <input id="qInput" placeholder="輸入關鍵字，例如：勞檢人力、身障進用、銀髮、移工">
-  <button class="primary" id="searchBtn">速答</button>
+  <input id="qInput" placeholder="直接輸入問題，例如：勞檢人力為什麼只有7人？或最新育嬰留停規定">
+  <button class="primary" id="searchBtn">智慧速答</button>
 </div>
 
 <div class="sectionTitle">常用題目</div>
@@ -100,17 +93,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
   <button class="topicBtn" data-q="工會">工會</button>
 </div>
 
-<section class="aiCard">
-  <div class="aiTitle">AI 即問</div>
-  <div class="aiHint">遇到題庫外問題，直接問。AI 會優先依目前整理的議會資料回答；資料不足會明確標示。</div>
-  <div class="aiAsk">
-    <input id="aiInput" placeholder="例如：議員問為什麼勞檢員只有7人，處長怎麼答？">
-    <button class="primary" id="aiBtn">問 AI</button>
-  </div>
-  <div id="aiStatus" class="aiStatus"></div>
-  <div id="aiAnswer" class="aiAnswer hidden"></div>
-</section>
-
 <section class="card" aria-live="polite">
   <div class="kicker">建議回答</div>
   <div class="topic" id="topic">請選議員或輸入問題</div>
@@ -120,7 +102,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
   <div class="block note hidden" id="sourceBox"><strong>資料來源／時間點</strong><div class="follow" id="source"></div></div>
 </section>
 
-<footer>議場使用版｜未收錄內容不自行推測</footer>
+<footer>議場使用版｜題庫優先；資料不足時由 AI 搜尋最新公開資料</footer>
 </div>
 
 <script>
@@ -178,60 +160,57 @@ function selectLeg(name){
  box.classList.remove("hidden");
 }
 
-function run(q){
- q=(q||"").trim();
+function showLocal(best){
  const topic=document.getElementById("topic"),answer=document.getElementById("answer");
  const nb=document.getElementById("numbersBox"),fb=document.getElementById("followBox"),sb=document.getElementById("sourceBox");
- if(!q){
-   if(selectedLeg!=="全部"){
-     topic.textContent=selectedLeg+"議員過去關切題";
-     answer.textContent=(history[selectedLeg]||[]).join("、")||"目前尚未整理到該議員的歷史題目。";
-   }else{
-     topic.textContent="請選議員或輸入問題";
-     answer.textContent="系統會顯示建議答法、關鍵數字及可能追問。";
-   }
-   nb.classList.add("hidden");fb.classList.add("hidden");sb.classList.add("hidden");return;
- }
- let best=null,score=0;
- data.forEach(item=>{let s=item.keys.reduce((n,k)=>n+(q.includes(k)?1:0),0);if(s>score){score=s;best=item;}});
- if(!best){
-   topic.textContent="尚未收入題庫："+q;
-   answer.textContent="現有資料未載明，建議由主管科補充；本系統不自行推測。";
-   nb.classList.add("hidden");fb.classList.remove("hidden");sb.classList.remove("hidden");
-   document.getElementById("follow").innerHTML='<div class="qaItem"><div class="qaQ">目前怎麼回？</div><div class="qaA">'+(selectedLeg!=="全部"?'可先查看「'+selectedLeg+'議員過去關切」題目，若沒有資料就由主管科補充。':'建議由主管科補入最新數字、正式口徑與來源。')+'</div></div>';
-   document.getElementById("source").textContent="尚無對應資料";return;
- }
- topic.textContent=best.topic;answer.textContent=best.answer;
+ topic.textContent=best.topic;
+ answer.textContent=best.answer;
  document.getElementById("numbers").textContent=best.numbers;
  const follow=document.getElementById("follow");
-follow.innerHTML="";
-(best.followups||[]).forEach(x=>{
- const item=document.createElement("div"); item.className="qaItem";
- const q=document.createElement("div"); q.className="qaQ"; q.textContent=x.q;
- const a=document.createElement("div"); a.className="qaA"; a.textContent=x.a;
- item.append(q,a); follow.appendChild(item);
-});
- document.getElementById("source").textContent=best.source;
+ follow.innerHTML="";
+ (best.followups||[]).forEach(x=>{
+   const item=document.createElement("div"); item.className="qaItem";
+   const q=document.createElement("div"); q.className="qaQ"; q.textContent=x.q;
+   const a=document.createElement("div"); a.className="qaA"; a.textContent=x.a;
+   item.append(q,a); follow.appendChild(item);
+ });
+ document.getElementById("source").textContent=best.source+"｜本題使用內建議會資料";
  nb.classList.remove("hidden");fb.classList.remove("hidden");sb.classList.remove("hidden");
 }
 
-document.querySelectorAll("[data-leg]").forEach(b=>b.addEventListener("click",()=>{selectLeg(b.dataset.leg);run("")}));
-document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>{qInput.value=b.dataset.q;run(b.dataset.q)}));
-document.getElementById("searchBtn").addEventListener("click",()=>run(qInput.value));
-qInput.addEventListener("keydown",e=>{if(e.key==="Enter")run(qInput.value)});
+function renderAI(data, question){
+ const topic=document.getElementById("topic"),answer=document.getElementById("answer");
+ const nb=document.getElementById("numbersBox"),fb=document.getElementById("followBox"),sb=document.getElementById("sourceBox");
+ topic.textContent="AI 智慧速答："+question;
+ answer.textContent=data.answer||"";
+ nb.classList.add("hidden");
+ fb.classList.add("hidden");
+ const src=document.getElementById("source");
+ src.innerHTML="";
+ if(Array.isArray(data.sources) && data.sources.length){
+   data.sources.slice(0,6).forEach((s,i)=>{
+     const a=document.createElement("a");
+     a.href=s.url; a.target="_blank"; a.rel="noopener noreferrer";
+     a.textContent=(i+1)+". "+(s.title||s.url);
+     a.style.display="block"; a.style.margin="4px 0";
+     src.appendChild(a);
+   });
+ }else{
+   src.textContent=data.usedWeb ? "AI 已啟用網路搜尋，但本次未取得可顯示的來源連結。" : "依內建議會資料整理。";
+ }
+ sb.classList.remove("hidden");
+}
 
-const aiInput=document.getElementById("aiInput");
-const aiBtn=document.getElementById("aiBtn");
-const aiStatus=document.getElementById("aiStatus");
-const aiAnswer=document.getElementById("aiAnswer");
-
-async function askAI(){
- const question=(aiInput.value||"").trim();
- if(!question) return;
- aiBtn.disabled=true;
- aiBtn.textContent="回答中…";
- aiStatus.textContent="正在整理建議答法";
- aiAnswer.classList.add("hidden");
+async function askAI(question){
+ const btn=document.getElementById("searchBtn");
+ const topic=document.getElementById("topic");
+ const answer=document.getElementById("answer");
+ btn.disabled=true; btn.textContent="查詢中…";
+ topic.textContent="正在查詢："+question;
+ answer.textContent="先比對議會題庫；如資料不足或涉及最新資訊，AI 會自動搜尋公開網路資料。";
+ document.getElementById("numbersBox").classList.add("hidden");
+ document.getElementById("followBox").classList.add("hidden");
+ document.getElementById("sourceBox").classList.add("hidden");
  try{
    const r=await fetch("/api/ask",{
      method:"POST",
@@ -240,18 +219,46 @@ async function askAI(){
    });
    const data=await r.json();
    if(!r.ok) throw new Error(data.error||"AI 服務暫時無法使用");
-   aiAnswer.textContent=data.answer;
-   aiAnswer.classList.remove("hidden");
-   aiStatus.textContent="AI 即問結果｜請以最新核定資料為準";
+   renderAI(data,question);
  }catch(e){
-   aiStatus.textContent="AI 暫時無法回答："+e.message;
+   topic.textContent="AI 暫時無法回答";
+   answer.textContent=e.message+"。可先改用上方常用題目查內建資料。";
  }finally{
-   aiBtn.disabled=false;
-   aiBtn.textContent="問 AI";
+   btn.disabled=false; btn.textContent="智慧速答";
  }
 }
-aiBtn.addEventListener("click",askAI);
-aiInput.addEventListener("keydown",e=>{if(e.key==="Enter")askAI()});
+
+async function run(q){
+ q=(q||"").trim();
+ const topic=document.getElementById("topic"),answer=document.getElementById("answer");
+ const nb=document.getElementById("numbersBox"),fb=document.getElementById("followBox"),sb=document.getElementById("sourceBox");
+
+ if(!q){
+   if(selectedLeg!=="全部"){
+     topic.textContent=selectedLeg+"議員過去關切題";
+     answer.textContent=(history[selectedLeg]||[]).join("、")||"目前尚未整理到該議員的歷史題目。";
+   }else{
+     topic.textContent="請選議員或輸入問題";
+     answer.textContent="系統會先查內建題庫；題庫沒有或涉及最新資訊時，AI 會自動上網查找公開資料。";
+   }
+   nb.classList.add("hidden");fb.classList.add("hidden");sb.classList.add("hidden");return;
+ }
+
+ let best=null,score=0;
+ data.forEach(item=>{let s=item.keys.reduce((n,k)=>n+(q.includes(k)?1:0),0);if(s>score){score=s;best=item;}});
+ const needsFresh=/(最新|目前|現在|今日|今天|今年|近期|最近|修法|新制|公告|新聞|現況|截至)/.test(q);
+
+ if(best && !needsFresh){
+   showLocal(best);
+   return;
+ }
+ await askAI(q);
+}
+
+document.querySelectorAll("[data-leg]").forEach(b=>b.addEventListener("click",()=>{selectLeg(b.dataset.leg);run("")}));
+document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>{qInput.value=b.dataset.q;run(b.dataset.q)}));
+document.getElementById("searchBtn").addEventListener("click",()=>run(qInput.value));
+qInput.addEventListener("keydown",e=>{if(e.key==="Enter")run(qInput.value)});
 </script>
 </body>
 </html>
