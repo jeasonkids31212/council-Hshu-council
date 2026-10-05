@@ -1,0 +1,8 @@
+{
+  "name": "council-hshu-council",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "ai": "^5.0.0"
+  }
+}
