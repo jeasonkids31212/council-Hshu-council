@@ -75,6 +75,8 @@ export default async function handler(req, res) {
     const models = ['gemini-3.8-flash', 'gemini-3.6-flash'];
     let answer = '';
     let lastError = null;
+    let sources = [];
+    let usedWeb = false;
 
     for (const model of models) {
       try {
@@ -82,15 +84,25 @@ export default async function handler(req, res) {
           model,
           contents: prompt,
           config: {
-            systemInstruction,
-            maxOutputTokens: 1200,
+            systemInstruction: systemInstruction + '\n若題目超出既有議會資料、涉及最新法規/政策/新聞/現況，或資料可能已變動，請優先使用 Google Search 查找最新且可信的公開來源，再回答。搜尋結果與既有資料若有差異，要明確區分「既有議會資料」與「最新公開資料」。',
+            maxOutputTokens: 1400,
             temperature: 0.2,
             thinkingConfig: {
               thinkingLevel: 'LOW'
-            }
+            },
+            tools: [{ googleSearch: {} }]
           }
         });
         answer = response.text || '';
+        const gm = response.candidates?.[0]?.groundingMetadata;
+        if (gm?.groundingChunks?.length) {
+          sources = gm.groundingChunks
+            .map(x => x.web)
+            .filter(Boolean)
+            .filter((x,i,arr)=>x.uri && arr.findIndex(y=>y.uri===x.uri)===i)
+            .map(x => ({ title: x.title || x.uri, url: x.uri }));
+          usedWeb = sources.length > 0 || (gm.webSearchQueries && gm.webSearchQueries.length > 0);
+        }
         if (answer) break;
       } catch (err) {
         lastError = err;
@@ -104,7 +116,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    res.status(200).json({ answer });
+    res.status(200).json({ answer, sources, usedWeb });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Gemini 服務暫時無法使用' });
