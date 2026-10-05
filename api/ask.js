@@ -72,22 +72,35 @@ export default async function handler(req, res) {
 
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: {
-        systemInstruction,
-        maxOutputTokens: 1200,
-        temperature: 0.2,
-        thinkingConfig: {
-          thinkingLevel: 'LOW'
-        }
-      }
-    });
+    const models = ['gemini-3.8-flash', 'gemini-3.6-flash'];
+    let answer = '';
+    let lastError = null;
 
-    const answer = response.text || '';
+    for (const model of models) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: {
+            systemInstruction,
+            maxOutputTokens: 1200,
+            temperature: 0.2,
+            thinkingConfig: {
+              thinkingLevel: 'LOW'
+            }
+          }
+        });
+        answer = response.text || '';
+        if (answer) break;
+      } catch (err) {
+        lastError = err;
+        console.error('Gemini model failed:', model, err);
+      }
+    }
+
     if (!answer) {
-      res.status(502).json({ error: 'Gemini 未回傳文字內容' });
+      if (lastError) console.error(lastError);
+      res.status(502).json({ error: 'Gemini 暫時忙碌，請再試一次' });
       return;
     }
 
