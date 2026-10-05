@@ -90,8 +90,8 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 8px}
   <button class="primary" id="searchBtn">智慧速答</button>
 </div>
 
-<div class="sectionTitle">常用題目</div>
-<div class="topicRow">
+<div class="sectionTitle" id="commonTitle">常用題目</div>
+<div class="topicRow" id="topicRow">
   <button class="topicBtn" data-q="身障就業">身障就業</button>
   <button class="topicBtn" data-q="銀髮就業">銀髮就業</button>
   <button class="topicBtn" data-q="勞檢人力">勞檢人力</button>
@@ -186,19 +186,77 @@ const data=[
 let selectedLeg="全部";
 const qInput=document.getElementById("qInput");
 
+function resetMainAnswer(){
+ qInput.value="";
+ document.getElementById("topic").textContent="請選擇上方題目";
+ document.getElementById("answer").textContent="點選該議員過去關切的題目，即可直接查看建議答法。";
+ document.getElementById("numbersBox").classList.add("hidden");
+ document.getElementById("followBox").classList.add("hidden");
+ document.getElementById("sourceBox").classList.add("hidden");
+}
+
+function renderLegTopicButtons(name){
+ const row=document.getElementById("topicRow");
+ const title=document.getElementById("commonTitle");
+ row.innerHTML="";
+ if(name==="全部"){
+   title.textContent="常用題目";
+   [
+     ["身障就業","身障就業"],["銀髮就業","銀髮就業"],["勞檢人力","勞檢人力"],
+     ["HR勞動法令小學堂","HR小學堂"],["預算","預算"],["移工","移工"],["工會","工會"]
+   ].forEach(([q,label])=>{
+     const b=document.createElement("button");
+     b.className="topicBtn"; b.dataset.q=q; b.textContent=label;
+     b.addEventListener("click",()=>{qInput.value=q;run(q)});
+     row.appendChild(b);
+   });
+   return;
+ }
+ title.textContent=name+"議員題目";
+ (legislatorQA[name]||[]).forEach(x=>{
+   const b=document.createElement("button");
+   b.className="topicBtn"; b.textContent=x.topic;
+   b.addEventListener("click",()=>{
+     qInput.value=x.topic;
+     document.getElementById("topic").textContent=x.topic;
+     document.getElementById("answer").textContent=x.answer;
+     document.getElementById("numbers").textContent=x.numbers;
+     document.getElementById("numbersBox").classList.remove("hidden");
+     const follow=document.getElementById("follow");
+     follow.innerHTML="";
+     const item=document.createElement("div"); item.className="qaItem";
+     const q=document.createElement("div"); q.className="qaQ"; q.textContent="可能追問";
+     const a=document.createElement("div"); a.className="qaA"; a.textContent=x.follow;
+     item.append(q,a); follow.appendChild(item);
+     document.getElementById("followBox").classList.remove("hidden");
+     document.getElementById("source").textContent=name+"議員過去質詢／關切題目整理";
+     document.getElementById("sourceBox").classList.remove("hidden");
+   });
+   row.appendChild(b);
+ });
+}
+
 function selectLeg(name){
  selectedLeg=name;
  document.querySelectorAll("[data-leg]").forEach(b=>b.classList.toggle("active",b.dataset.leg===name));
  const box=document.getElementById("legHistory");
  const qa=document.getElementById("legQa");
+
+ resetMainAnswer();
+ renderLegTopicButtons(name);
+
  if(name==="全部"){
    box.classList.add("hidden");
    qa.innerHTML="";
+   document.getElementById("topic").textContent="請選議員或輸入問題";
+   document.getElementById("answer").textContent="系統會先查內建題庫；題庫沒有或涉及最新資訊時，AI 會自動查找公開資料。";
    return;
  }
+
  document.getElementById("legTitle").textContent=name+"議員過去關切";
  document.getElementById("legTopics").textContent=(history[name]||[]).join("、");
  qa.innerHTML="";
+
  (legislatorQA[name]||[]).forEach(x=>{
    const card=document.createElement("div"); card.className="legQaCard";
    const title=document.createElement("div"); title.className="legQaTitle"; title.textContent=x.topic;
@@ -321,7 +379,7 @@ async function run(q){
 }
 
 document.querySelectorAll("[data-leg]").forEach(b=>b.addEventListener("click",()=>{selectLeg(b.dataset.leg);}));
-document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>{qInput.value=b.dataset.q;run(b.dataset.q)}));
+renderLegTopicButtons("全部");
 document.getElementById("searchBtn").addEventListener("click",()=>run(qInput.value));
 qInput.addEventListener("keydown",e=>{if(e.key==="Enter")run(qInput.value)});
 </script>
